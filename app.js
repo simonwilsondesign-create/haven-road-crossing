@@ -14,6 +14,7 @@ let historyHours = 24;
 let forecastHours = 6;
 let forecast = null;
 let forecastPayload = null;
+let historyAvailable = false;
 
 function setText(id, value) {
   $(id).textContent = value;
@@ -40,6 +41,7 @@ function trendFor(readings) {
 }
 
 function applyGauge(payload) {
+  historyAvailable = Boolean(payload.historySource && payload.historyWindowHours >= 48);
   series = (payload.observations || [])
     .map((reading) => ({ time: new Date(reading.observedAt).getTime(), value: Number(reading.heightMetres), quality: reading.qualityCode }))
     .filter((reading) => Number.isFinite(reading.time) && Number.isFinite(reading.value))
@@ -99,7 +101,9 @@ function applyGauge(payload) {
     setText('trend', `${direction} · ${trend.delta >= 0 ? '+' : ''}${trend.delta.toFixed(2)} m over ${trend.duration} min`);
   }
   setText('source-status', payload.source === 'bom-ftp'
-    ? 'Live gauge data from BOM public FTP · Station 040813'
+    ? payload.historySource
+      ? `Live BOM gauge · ${payload.historyWindowHours || 'recent'}h history via Queensland Water Monitoring`
+      : 'Live gauge data from BOM public FTP · Station 040813'
     : 'Gauge source unavailable · Last stored observations are not current');
   renderChart();
   renderEvents(fresh);
@@ -126,13 +130,19 @@ function renderChart() {
   $('chart').setAttribute('viewBox', `0 0 ${width} 260`);
   $('chart').innerHTML = `<title id="chart-title">Gauge heights over the last ${historyHours} hours</title><desc id="chart-description">Latest height ${metres(last.value)} metres. Unsafe crossing threshold 1.49 metres.</desc><defs><linearGradient id="chart-fill" x1="0" y1="0" x2="0" y2="1"><stop stop-color="var(--water)" stop-opacity=".20"/><stop offset="1" stop-color="var(--water-tail)" stop-opacity=".025"/></linearGradient></defs><text x="${left - 10}" y="14" text-anchor="end">m</text><rect x="${left}" y="${top}" width="${right - left}" height="${Math.max(0, y(THRESHOLD) - top)}" fill="#fff8f8"/>${lines}<path d="${area}" fill="url(#chart-fill)"/><line x1="${left}" y1="${y(THRESHOLD)}" x2="${right}" y2="${y(THRESHOLD)}" stroke="#c50000" stroke-opacity=".65" stroke-dasharray="5 5"/><text x="${left + 8}" y="${y(THRESHOLD) - 9}" class="threshold-label">1.49 m · do not cross</text><polyline points="${points.join(' ')}" stroke="var(--water)" stroke-width="2.5" fill="none" stroke-linejoin="round"/><circle cx="${x(last.time)}" cy="${y(last.value)}" r="8" fill="var(--water)" opacity=".12"/><circle cx="${x(last.time)}" cy="${y(last.value)}" r="4" fill="var(--water)" stroke="white" stroke-width="2"/>${ticks}<line id="crosshair" y1="${top}" y2="${bottom}" stroke="var(--water)" stroke-opacity=".35" stroke-dasharray="3 4"/><circle id="inspect-dot" r="4" fill="white" stroke="var(--water)" stroke-width="2"/>`;
   $('chart')._coords = { x, y, left, right, width, start, end };
-  setText('chart-sub', `${stamp(start)} – ${stamp(end)} · AEST`);
+  setText('chart-sub', `${stamp(start)} – ${stamp(end)} · AEST${historyHours > 24 && payloadHistoryNote()}`);
   $('inspect').max = visible.length - 1;
   $('inspect').value = visible.length - 1;
   inspect(Number($('inspect').value));
   document.querySelectorAll('[data-hours]').forEach((button) => button.setAttribute('aria-pressed', String(Number(button.dataset.hours) === historyHours)));
   setText('table-caption', `Latest available gauge observations · ${historyHours}h window · AEST`);
   $('data-table').innerHTML = visible.slice().reverse().map((reading) => `<tr><td>${stamp(reading.time)}</td><td>${metres(reading.value)} m</td><td>${reading.value >= THRESHOLD ? 'At or above' : 'Below'}</td></tr>`).join('');
+}
+
+function payloadHistoryNote() {
+  return historyAvailable
+    ? ' · historical observations supplied by Queensland Water Monitoring'
+    : ' · limited to observations currently available';
 }
 
 function inspect(index) {

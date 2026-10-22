@@ -3,6 +3,8 @@ const { Writable } = require('stream');
 const snapshot = require('../gauge-data-snapshot.json');
 
 const STATION_ID = '040813';
+const HISTORY_STATION_ID = '143032A';
+const HISTORY_WINDOW_HOURS = 48;
 const CACHE_MS = 5 * 60 * 1000;
 let cached = null;
 let cachedAt = 0;
@@ -75,6 +77,53 @@ async function fromBomFtp() {
   } finally { client.close(); }
 }
 
+function brisbaneStamp(time) {
+  const values = new Intl.DateTimeFormat('en-AU', {
+    timeZone: 'Australia/Brisbane', year: 'numeric', month: '2-digit', day: '2-digit',
+    hour: '2-digit', minute: '2-digit', second: '2-digit', hourCycle: 'h23'
+  }).formatToParts(time).reduce((result, part) => ({ ...result, [part.type]: part.value }), {});
+  return `${values.year}${values.month}${values.day}${values.hour}${values.minute}${values.second}`;
+}
+
+function qldTimeToIso(value) {
+  const stamp = String(value).padStart(14, '0');
+  return new Date(Date.UTC(
+    Number(stamp.slice(0, 4)), Number(stamp.slice(4, 6)) - 1, Number(stamp.slice(6, 8)),
+    Number(stamp.slice(8, 10)) - 10, Number(stamp.slice(10, 12)), Number(stamp.slice(12, 14))
+  )).toISOString();
+}
+
+async function fromQldHistory() {
+  const now = new Date();
+  const request = {
+    function: 'get_ts_traces', version: '2', params: {
+      site_list: HISTORY_STATION_ID, datasource: 'AT', varfrom: '100.00', varto: '100.00',
+      start_time: brisbaneStamp(new Date(now.getTime() - HISTORY_WINDOW_HOURS * 60 * 60 * 1000)),
+      end_time: brisbaneStamp(now), data_type: 'point', interval: 'minute', multiplier: '1'
+    }
+  };
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 10_000);
+  try {
+    const response = await fetch(`https://water-monitoring.information.qld.gov.au/cgi/webservice.exe?${encodeURIComponent(JSON.stringify(request))}`, { signal: controller.signal });
+    if (!response.ok) throw new Error(`Queensland history service returned ${response.status}`);
+    const payload = await response.json();
+    const trace = payload?.return?.traces?.[0];
+    if (payload?.error_num || trace?.error_num || !Array.isArray(trace?.trace)) throw new Error(trace?.error_msg || payload?.error_msg || 'Queensland history service returned no trace');
+    return trace.trace.map((reading) => ({
+      observedAt: qldTimeToIso(reading.t), heightMetres: Number(reading.v),
+      qualityCode: `QLD-${reading.q}`, sensorParam: 'Stage (Queensland WMIP)'
+    })).filter((reading) => Number.isFinite(reading.heightMetres));
+  } finally { clearTimeout(timeout); }
+}
+
+function mergeReadings(history, live) {
+  // Values at matching timestamps come from the BOM live feed so the latest
+  // safety state always retains its primary source and cadence.
+  return [...new Map([...history, ...live].map((reading) => [reading.observedAt, reading])).values()]
+    .sort((a, b) => new Date(a.observedAt) - new Date(b.observedAt));
+}
+
 function fallback(reason) {
   return {
     source: 'snapshot',
@@ -92,6 +141,15 @@ module.exports = async (_request, response) => {
   if (cached && Date.now() - cachedAt < CACHE_MS) return response.status(200).json(cached);
   try {
     cached = await fromBomFtp();
+    try {
+      const history = await fromQldHistory();
+      cached.observations = mergeReadings(history, cached.observations);
+      cached.historySource = 'Queensland Water Monitoring Information Portal · station 143032A';
+      cached.historyWindowHours = HISTORY_WINDOW_HOURS;
+    } catch (historyError) {
+      cached.historySource = 'Recent BOM observations only';
+      cached.historyError = historyError instanceof Error ? historyError.message : 'Queensland history service unavailable';
+    }
     cachedAt = Date.now();
     return response.status(200).json(cached);
   } catch (error) {

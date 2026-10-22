@@ -1,6 +1,6 @@
 # Verified BOM dataset route
 
-Checked 22 October 2026 (Australia/Brisbane). This is source discovery, not a production integration or a statement of current crossing conditions.
+Checked 22 October 2026 (Australia/Brisbane). The dashboard now uses the sources below; this document records their roles and limits rather than a statement of current crossing conditions.
 
 ## What worked
 
@@ -21,7 +21,9 @@ The JSON preserves UTC timestamps, Brisbane timestamps, original units, sensor m
 
 ## Production implications
 
-Use a scheduled server-side FTP ingestion job and expose cached JSON to the dashboard over HTTPS. Browsers should not access FTP directly. Confirm that the chosen Vercel runtime permits the required FTP connections; otherwise use an external ingestion worker and retain Vercel for the dashboard and read API. Archive observations to obtain longer history than the current files supply. Deduplicate repeated records and resolve corrections using a documented generation-time/quality policy.
+The deployed Vercel endpoint reads the current BOM public-FTP products server-side and exposes JSON over HTTPS. Browsers do not access FTP directly. The endpoint additionally requests the preceding 48 hours of Stage data from Queensland's Water Monitoring Information Portal (WMIP), site `143032A`, then deduplicates matching timestamps in favour of the BOM reading. This extends the chart while retaining the BOM feed as the source for the current crossing state.
+
+The matching portion of the owner-supplied series confirms the two feeds are compatible for this use: the recorded value at 12:00 AEST on 22 October was 1.81 m, matching the BOM feed. WMIP’s public API documentation describes the source as hourly data that may be transmitted more often during events; chart gaps and differing cadence are shown rather than interpolated. The chart labels all times as AEST.
 
 Verify the HCS product specification, quality flags, datum, sensor selection, historical coverage and current gauge metadata before implementing the production adapter. The gauge-to-crossing threshold of 1.49 m remains owner supplied.
 
@@ -29,10 +31,10 @@ The [BOM FTP catalogue](https://www.bom.gov.au/catalogue/anon-ftp.shtml) describ
 
 [BOM's observation notes](https://www.bom.gov.au/australia/flood/additional_notes.shtml) explain that these are operational observations, not fully quality controlled, and may be unavailable outside flood periods. Those limits make observation age and missing-data handling essential.
 
-The HTML demo remains fictional so that its scenario controls continue to serve design review. This real snapshot is separate and must never be presented as live data.
+The static snapshot remains only as a degraded-mode fallback and is clearly identified as stale when used.
 
 ## Weather and radar addition
 
 The owner supplied [BOM radar product IDR663](https://reg.bom.gov.au/products/IDR663.loop.shtml), verified as the **128 km Brisbane (Mt Stapylton) Radar Loop**. It is linked from the demo. The radar illustration in the demo is decorative; no actual radar frames have been downloaded, embedded or reprocessed.
 
-The rain outlook is a separate fictional forecast fixture with 6-hour and 24-hour views. No forecast API is connected or attributed to BOM. Before the full build, select an authorised point/catchment forecast source, confirm its time resolution, units, probabilities, issue times, update cadence and redistribution terms. Forecast and radar timestamps must be handled separately from gauge timestamps.
+The rain outlook is supplied by Open-Meteo at the crossing coordinates, with 6-hour and 24-hour views. Forecast and radar timestamps remain separate from gauge timestamps.

@@ -5,6 +5,7 @@ A small Vercel dashboard for the Haven Road creek crossing at **27.490805° S, 1
 ## What the dashboard shows
 
 - Latest BOM public-FTP water-level observations, plotted against the 1.49 m threshold.
+- A 48-hour historical window from Queensland Water Monitoring station `143032A`, merged with the faster BOM observations at matching timestamps.
 - A high-visibility red flood state whenever the latest live BOM observation is at or above the threshold.
 - An explicit freshness warning when the latest reading is old. A lower height does not declare the road open; local conditions and closures still need checking.
 - Open-Meteo hourly precipitation and probability at the crossing coordinates, plus a link to the BOM Brisbane radar loop.
@@ -31,6 +32,7 @@ The serverless gauge endpoint downloads the current `IDQ65910` and `IDQ65911` BO
 
 - [BOM gauge page](https://www.bom.gov.au/fwo/IDQ65389/IDQ65389.040813.plt.shtml)
 - [BOM Brisbane radar loop](https://reg.bom.gov.au/products/IDR663.loop.shtml)
+- [Queensland Water Monitoring Information Portal API](https://water-monitoring.information.qld.gov.au/wini/Documents/WMIP_API_2025.pdf)
 - [Open-Meteo Forecast API](https://open-meteo.com/en/docs)
 
 `brief.md` records the product and interface brief; `data-source.md` records the data interpretation and fallback behaviour.
