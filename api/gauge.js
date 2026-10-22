@@ -140,10 +140,15 @@ module.exports = async (_request, response) => {
   response.setHeader('Cache-Control', 's-maxage=300, stale-while-revalidate=600');
   if (cached && Date.now() - cachedAt < CACHE_MS) return response.status(200).json(cached);
   try {
-    cached = await fromBomFtp();
+    // Fetch the current BOM feed and the longer WMIP window concurrently so a
+    // cold serverless request remains quick enough to return both datasets.
+    const bomRequest = fromBomFtp();
+    const historyRequest = fromQldHistory().catch((historyError) => ({ error: historyError }));
+    cached = await bomRequest;
+    const historyResult = await historyRequest;
     try {
-      const history = await fromQldHistory();
-      cached.observations = mergeReadings(history, cached.observations);
+      if (historyResult.error) throw historyResult.error;
+      cached.observations = mergeReadings(historyResult, cached.observations);
       cached.historySource = 'Queensland Water Monitoring Information Portal · station 143032A';
       cached.historyWindowHours = HISTORY_WINDOW_HOURS;
     } catch (historyError) {
