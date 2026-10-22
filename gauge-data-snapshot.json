@@ -1,0 +1,283 @@
+{
+  "description": "Actual BOM observations retrieved for source verification. Static snapshot, not a live conditions feed. Quality and datum codes have not yet been decoded against the product specification.",
+  "stationId": "040813",
+  "stationName": "Upper Brookfield TM",
+  "sources": [
+    {
+      "product": "IDQ65910",
+      "url": "ftp://ftp.bom.gov.au/anon/gen/fwo/IDQ65910_20261021215300.hcs",
+      "format": "BOM-HCS 2.0"
+    },
+    {
+      "product": "IDQ65911",
+      "url": "ftp://ftp.bom.gov.au/anon/gen/fwo/IDQ65911_20261021210800.hcs",
+      "format": "BOM-HCS 2.0"
+    }
+  ],
+  "observations": [
+    {
+      "stationId": "040813",
+      "observedAt": "2026-10-21T18:10:01Z",
+      "observedAtBrisbane": "2026-10-22T04:10:01+10:00",
+      "heightMetres": 0.669,
+      "sourceUnit": "metres",
+      "sensorType": "WL",
+      "sensorDataType": "1",
+      "siteIdType": "SR",
+      "sensorParam1": "LGH",
+      "qualityCode": "1"
+    },
+    {
+      "stationId": "040813",
+      "observedAt": "2026-10-21T18:15:01Z",
+      "observedAtBrisbane": "2026-10-22T04:15:01+10:00",
+      "heightMetres": 0.679,
+      "sourceUnit": "metres",
+      "sensorType": "WL",
+      "sensorDataType": "1",
+      "siteIdType": "SR",
+      "sensorParam1": "LGH",
+      "qualityCode": "1"
+    },
+    {
+      "stationId": "040813",
+      "observedAt": "2026-10-21T18:20:01Z",
+      "observedAtBrisbane": "2026-10-22T04:20:01+10:00",
+      "heightMetres": 0.69,
+      "sourceUnit": "metres",
+      "sensorType": "WL",
+      "sensorDataType": "1",
+      "siteIdType": "SR",
+      "sensorParam1": "LGH",
+      "qualityCode": "1"
+    },
+    {
+      "stationId": "040813",
+      "observedAt": "2026-10-21T18:25:01Z",
+      "observedAtBrisbane": "2026-10-22T04:25:01+10:00",
+      "heightMetres": 0.708,
+      "sourceUnit": "metres",
+      "sensorType": "WL",
+      "sensorDataType": "1",
+      "siteIdType": "SR",
+      "sensorParam1": "LGH",
+      "qualityCode": "1"
+    },
+    {
+      "stationId": "040813",
+      "observedAt": "2026-10-21T18:30:01Z",
+      "observedAtBrisbane": "2026-10-22T04:30:01+10:00",
+      "heightMetres": 0.722,
+      "sourceUnit": "metres",
+      "sensorType": "WL",
+      "sensorDataType": "1",
+      "siteIdType": "SR",
+      "sensorParam1": "LGH",
+      "qualityCode": "1"
+    },
+    {
+      "stationId": "040813",
+      "observedAt": "2026-10-21T18:35:01Z",
+      "observedAtBrisbane": "2026-10-22T04:35:01+10:00",
+      "heightMetres": 0.737,
+      "sourceUnit": "metres",
+      "sensorType": "WL",
+      "sensorDataType": "1",
+      "siteIdType": "SR",
+      "sensorParam1": "LGH",
+      "qualityCode": "1"
+    },
+    {
+      "stationId": "040813",
+      "observedAt": "2026-10-21T18:40:01Z",
+      "observedAtBrisbane": "2026-10-22T04:40:01+10:00",
+      "heightMetres": 0.753,
+      "sourceUnit": "metres",
+      "sensorType": "WL",
+      "sensorDataType": "1",
+      "siteIdType": "SR",
+      "sensorParam1": "LGH",
+      "qualityCode": "1"
+    },
+    {
+      "stationId": "040813",
+      "observedAt": "2026-10-21T18:45:01Z",
+      "observedAtBrisbane": "2026-10-22T04:45:01+10:00",
+      "heightMetres": 0.768,
+      "sourceUnit": "metres",
+      "sensorType": "WL",
+      "sensorDataType": "1",
+      "siteIdType": "SR",
+      "sensorParam1": "LGH",
+      "qualityCode": "1"
+    },
+    {
+      "stationId": "040813",
+      "observedAt": "2026-10-21T18:50:01Z",
+      "observedAtBrisbane": "2026-10-22T04:50:01+10:00",
+      "heightMetres": 0.782,
+      "sourceUnit": "metres",
+      "sensorType": "WL",
+      "sensorDataType": "1",
+      "siteIdType": "SR",
+      "sensorParam1": "LGH",
+      "qualityCode": "1"
+    },
+    {
+      "stationId": "040813",
+      "observedAt": "2026-10-21T18:55:01Z",
+      "observedAtBrisbane": "2026-10-22T04:55:01+10:00",
+      "heightMetres": 0.797,
+      "sourceUnit": "metres",
+      "sensorType": "WL",
+      "sensorDataType": "1",
+      "siteIdType": "SR",
+      "sensorParam1": "LGH",
+      "qualityCode": "1"
+    },
+    {
+      "stationId": "040813",
+      "observedAt": "2026-10-21T19:00:01Z",
+      "observedAtBrisbane": "2026-10-22T05:00:01+10:00",
+      "heightMetres": 0.809,
+      "sourceUnit": "metres",
+      "sensorType": "WL",
+      "sensorDataType": "1",
+      "siteIdType": "SR",
+      "sensorParam1": "LGH",
+      "qualityCode": "1"
+    },
+    {
+      "stationId": "040813",
+      "observedAt": "2026-10-21T19:05:01Z",
+      "observedAtBrisbane": "2026-10-22T05:05:01+10:00",
+      "heightMetres": 0.82,
+      "sourceUnit": "metres",
+      "sensorType": "WL",
+      "sensorDataType": "1",
+      "siteIdType": "SR",
+      "sensorParam1": "LGH",
+      "qualityCode": "1"
+    },
+    {
+      "stationId": "040813",
+      "observedAt": "2026-10-21T19:10:01Z",
+      "observedAtBrisbane": "2026-10-22T05:10:01+10:00",
+      "heightMetres": 0.834,
+      "sourceUnit": "metres",
+      "sensorType": "WL",
+      "sensorDataType": "1",
+      "siteIdType": "SR",
+      "sensorParam1": "LGH",
+      "qualityCode": "1"
+    },
+    {
+      "stationId": "040813",
+      "observedAt": "2026-10-21T19:15:01Z",
+      "observedAtBrisbane": "2026-10-22T05:15:01+10:00",
+      "heightMetres": 0.846,
+      "sourceUnit": "metres",
+      "sensorType": "WL",
+      "sensorDataType": "1",
+      "siteIdType": "SR",
+      "sensorParam1": "LGH",
+      "qualityCode": "1"
+    },
+    {
+      "stationId": "040813",
+      "observedAt": "2026-10-21T19:25:01Z",
+      "observedAtBrisbane": "2026-10-22T05:25:01+10:00",
+      "heightMetres": 0.863,
+      "sourceUnit": "metres",
+      "sensorType": "WL",
+      "sensorDataType": "1",
+      "siteIdType": "SR",
+      "sensorParam1": "LGH",
+      "qualityCode": "1"
+    },
+    {
+      "stationId": "040813",
+      "observedAt": "2026-10-21T19:35:01Z",
+      "observedAtBrisbane": "2026-10-22T05:35:01+10:00",
+      "heightMetres": 0.878,
+      "sourceUnit": "metres",
+      "sensorType": "WL",
+      "sensorDataType": "1",
+      "siteIdType": "SR",
+      "sensorParam1": "LGH",
+      "qualityCode": "1"
+    },
+    {
+      "stationId": "040813",
+      "observedAt": "2026-10-21T19:40:01Z",
+      "observedAtBrisbane": "2026-10-22T05:40:01+10:00",
+      "heightMetres": 0.888,
+      "sourceUnit": "metres",
+      "sensorType": "WL",
+      "sensorDataType": "1",
+      "siteIdType": "SR",
+      "sensorParam1": "LGH",
+      "qualityCode": "1"
+    },
+    {
+      "stationId": "040813",
+      "observedAt": "2026-10-21T19:45:01Z",
+      "observedAtBrisbane": "2026-10-22T05:45:01+10:00",
+      "heightMetres": 0.903,
+      "sourceUnit": "metres",
+      "sensorType": "WL",
+      "sensorDataType": "1",
+      "siteIdType": "SR",
+      "sensorParam1": "LGH",
+      "qualityCode": "1"
+    },
+    {
+      "stationId": "040813",
+      "observedAt": "2026-10-21T19:50:01Z",
+      "observedAtBrisbane": "2026-10-22T05:50:01+10:00",
+      "heightMetres": 0.921,
+      "sourceUnit": "metres",
+      "sensorType": "WL",
+      "sensorDataType": "1",
+      "siteIdType": "SR",
+      "sensorParam1": "LGH",
+      "qualityCode": "1"
+    },
+    {
+      "stationId": "040813",
+      "observedAt": "2026-10-21T19:55:01Z",
+      "observedAtBrisbane": "2026-10-22T05:55:01+10:00",
+      "heightMetres": 0.937,
+      "sourceUnit": "metres",
+      "sensorType": "WL",
+      "sensorDataType": "1",
+      "siteIdType": "SR",
+      "sensorParam1": "LGH",
+      "qualityCode": "1"
+    },
+    {
+      "stationId": "040813",
+      "observedAt": "2026-10-21T20:00:01Z",
+      "observedAtBrisbane": "2026-10-22T06:00:01+10:00",
+      "heightMetres": 0.951,
+      "sourceUnit": "metres",
+      "sensorType": "WL",
+      "sensorDataType": "1",
+      "siteIdType": "SR",
+      "sensorParam1": "LGH",
+      "qualityCode": "1"
+    },
+    {
+      "stationId": "040813",
+      "observedAt": "2026-10-21T21:00:01Z",
+      "observedAtBrisbane": "2026-10-22T07:00:01+10:00",
+      "heightMetres": 0.981,
+      "sourceUnit": "metres",
+      "sensorType": "WL",
+      "sensorDataType": "1",
+      "siteIdType": "SR",
+      "sensorParam1": "LGH",
+      "qualityCode": "1"
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "name": "haven-road-crossing",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Live Haven Road crossing conditions",
+  "type": "commonjs",
+  "scripts": {
+    "check": "node --check api/gauge.js && node --check api/weather.js && node --check app.js"
+  },
+  "dependencies": {
+    "basic-ftp": "^5.0.5"
+  },
+  "engines": {
+    "node": "24.x"
+  }
+}
