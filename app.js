@@ -8,9 +8,11 @@ const fmtTime = new Intl.DateTimeFormat('en-AU', { timeZone: 'Australia/Brisbane
 const fmtDate = new Intl.DateTimeFormat('en-AU', { timeZone: 'Australia/Brisbane', day: '2-digit', month: 'short' });
 const stamp = (time) => `${fmtDate.format(time)}, ${fmtTime.format(time)}`;
 const asAest = (value) => new Date(`${value}+10:00`);
+const HISTORY_OPTIONS = [6, 24, 48];
+const requestedHistory = Number(new URLSearchParams(window.location.search).get('history'));
 let series = [];
 let visible = [];
-let historyHours = 48;
+let historyHours = HISTORY_OPTIONS.includes(requestedHistory) ? requestedHistory : 48;
 let forecastHours = 6;
 let forecast = null;
 let forecastPayload = null;
@@ -18,6 +20,12 @@ let historyAvailable = false;
 
 function setText(id, value) {
   $(id).textContent = value;
+}
+
+function updateHistoryLocation() {
+  const url = new URL(window.location.href);
+  url.searchParams.set('history', historyHours);
+  window.history.replaceState({}, '', `${url.pathname}${url.search}${url.hash}`);
 }
 
 function metres(value) {
@@ -282,7 +290,11 @@ async function load() {
   if (weather.status === 'fulfilled') renderWeather(weather.value); else weatherError(weather.reason);
 }
 
-document.querySelectorAll('[data-hours]').forEach((button) => button.addEventListener('click', () => { historyHours = Number(button.dataset.hours); if (series.length) renderChart(); }));
+document.querySelectorAll('[data-hours]').forEach((button) => button.addEventListener('click', () => {
+  historyHours = Number(button.dataset.hours);
+  updateHistoryLocation();
+  if (series.length) renderChart();
+}));
 $('inspect').addEventListener('input', (event) => inspect(Number(event.target.value)));
 $('chart').addEventListener('pointermove', (event) => {
   const coords = $('chart')._coords;
@@ -297,5 +309,6 @@ $('chart').addEventListener('pointermove', (event) => {
 document.querySelectorAll('[data-rain-hours]').forEach((button) => button.addEventListener('click', () => { forecastHours = Number(button.dataset.rainHours); if (forecastPayload) renderWeather(forecastPayload); }));
 window.addEventListener('resize', () => { if (series.length) renderChart(); });
 initializeMap();
+updateHistoryLocation();
 load();
 setInterval(load, 5 * 60 * 1000);
