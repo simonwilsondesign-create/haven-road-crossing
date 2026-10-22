@@ -4,6 +4,16 @@
       "maxDuration": 20
     }
   },
+  "redirects": [
+    {
+      "source": "/",
+      "destination": "/?history=48",
+      "permanent": false,
+      "missing": [
+        { "type": "query", "key": "history" }
+      ]
+    }
+  ],
   "headers": [
     {
       "source": "/(.*)",
