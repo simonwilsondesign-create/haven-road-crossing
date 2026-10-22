@@ -260,20 +260,8 @@ function initializeMap() {
   wash.className = 'map-flood-wash';
   wash.setAttribute('aria-hidden', 'true');
 
-  const overlay = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-  overlay.setAttribute('class', 'map-water-overlay');
-  overlay.setAttribute('viewBox', '0 0 540 410');
-  overlay.setAttribute('preserveAspectRatio', 'none');
-  overlay.setAttribute('aria-hidden', 'true');
-  const river = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-  river.setAttribute('d', 'M510 -20 C430 60 455 125 370 172 S250 235 168 285 S72 347 -20 430');
-  river.setAttribute('fill', 'none');
-  river.setAttribute('stroke-width', '34');
-  river.setAttribute('stroke-linecap', 'round');
-  overlay.append(river);
-
   // The embedded OpenStreetMap view includes the required contributor credit.
-  map.prepend(frame, wash, overlay);
+  map.prepend(frame, wash);
   setText('art-caption', 'Map centred on the crossing.');
 }
 
