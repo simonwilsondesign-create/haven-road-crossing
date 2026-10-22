@@ -243,6 +243,40 @@ function weatherError(error) {
   $('rain-columns').innerHTML = '';
 }
 
+function initializeMap() {
+  const map = document.querySelector('.river-art');
+  if (!map || map.querySelector('.osm-map')) return;
+  map.removeAttribute('aria-hidden');
+  map.setAttribute('role', 'region');
+  map.setAttribute('aria-label', 'OpenStreetMap view centred on the Haven Road crossing');
+
+  const frame = document.createElement('iframe');
+  frame.className = 'osm-map';
+  frame.title = 'OpenStreetMap view of Haven Road crossing';
+  frame.loading = 'lazy';
+  frame.src = 'https://www.openstreetmap.org/export/embed.html?bbox=152.8835%2C-27.4935%2C152.8930%2C-27.4880&layer=mapnik&marker=-27.490805008469277%2C152.88833798916386';
+
+  const wash = document.createElement('div');
+  wash.className = 'map-flood-wash';
+  wash.setAttribute('aria-hidden', 'true');
+
+  const overlay = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  overlay.setAttribute('class', 'map-water-overlay');
+  overlay.setAttribute('viewBox', '0 0 540 410');
+  overlay.setAttribute('preserveAspectRatio', 'none');
+  overlay.setAttribute('aria-hidden', 'true');
+  const river = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+  river.setAttribute('d', 'M510 -20 C430 60 455 125 370 172 S250 235 168 285 S72 347 -20 430');
+  river.setAttribute('fill', 'none');
+  river.setAttribute('stroke-width', '34');
+  river.setAttribute('stroke-linecap', 'round');
+  overlay.append(river);
+
+  // The embedded OpenStreetMap view includes the required contributor credit.
+  map.prepend(frame, wash, overlay);
+  setText('art-caption', 'Map centred on the crossing.');
+}
+
 async function load() {
   const [gauge, weather] = await Promise.allSettled([
     fetch('/api/gauge').then(async (response) => {
@@ -274,5 +308,6 @@ $('chart').addEventListener('pointermove', (event) => {
 });
 document.querySelectorAll('[data-rain-hours]').forEach((button) => button.addEventListener('click', () => { forecastHours = Number(button.dataset.rainHours); if (forecastPayload) renderWeather(forecastPayload); }));
 window.addEventListener('resize', () => { if (series.length) renderChart(); });
+initializeMap();
 load();
 setInterval(load, 5 * 60 * 1000);
